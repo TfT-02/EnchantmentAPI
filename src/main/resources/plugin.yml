@@ -1,6 +1,6 @@
 name: EnchantmentAPI
 main: com.rit.sucy.EnchantmentAPI
-version: 4.20
+version: ${project.version}
 commands:
     enchantapi:
         description: root command
