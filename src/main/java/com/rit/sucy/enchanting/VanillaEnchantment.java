@@ -1,21 +1,20 @@
 package com.rit.sucy.enchanting;
 
-import com.rit.sucy.CustomEnchantment;
-import com.rit.sucy.service.MaterialClass;
-import org.bukkit.Bukkit;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.rit.sucy.CustomEnchantment;
+import com.rit.sucy.service.MaterialClass;
 
 /**
  * @author Diemex
  */
-public class VanillaEnchantment extends CustomEnchantment
-{
+public class VanillaEnchantment extends CustomEnchantment {
     /**
      * The Enchantment which this represents
      */
@@ -37,8 +36,9 @@ public class VanillaEnchantment extends CustomEnchantment
 
         this.enchantability = new HashMap<MaterialClass, Integer>();
 
-        for (String sGroup : suffixGroup)
+        for (String sGroup : suffixGroup) {
             suffixGroups.add(sGroup);
+        }
     }
 
     public Enchantment getVanillaEnchant() {
@@ -53,13 +53,15 @@ public class VanillaEnchantment extends CustomEnchantment
     @Override
     public ItemStack addToItem(ItemStack item, int level) {
         if (item.getType() == Material.ENCHANTED_BOOK) {
-            EnchantmentStorageMeta meta = (EnchantmentStorageMeta)item.getItemMeta();
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
             if (meta.hasStoredEnchant(vanilla)) {
                 if (meta.getEnchantLevel(vanilla) < level) {
                     meta.removeStoredEnchant(vanilla);
                     item.setItemMeta(meta);
                 }
-                else return item;
+                else {
+                    return item;
+                }
             }
         }
 
@@ -70,7 +72,7 @@ public class VanillaEnchantment extends CustomEnchantment
     @Override
     public ItemStack removeFromItem(ItemStack item) {
         if (item.getType() == Material.ENCHANTED_BOOK) {
-            EnchantmentStorageMeta meta = (EnchantmentStorageMeta)item.getItemMeta();
+            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
             if (meta.hasStoredEnchant(vanilla)) {
                 meta.removeStoredEnchant(vanilla);
                 item.setItemMeta(meta);

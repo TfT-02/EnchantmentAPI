@@ -3,8 +3,7 @@ package com.rit.sucy.service;
 /**
  * Represents a configuration node.
  */
-public interface ConfigNode
-{
+public interface ConfigNode {
 
     /**
      * Get the config path.
@@ -38,8 +37,7 @@ public interface ConfigNode
     /**
      * Variable Types.
      */
-    public enum VarType
-    {
+    public enum VarType {
         STRING,
         INTEGER,
         DOUBLE,
@@ -50,8 +48,7 @@ public interface ConfigNode
     /**
      * SubTypes, like percentage, y-value, custom etc
      */
-    public enum SubType
-    {
+    public enum SubType {
         PERCENTAGE,
         Y_VALUE,
         HEALTH,

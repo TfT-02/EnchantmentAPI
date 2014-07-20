@@ -11,5 +11,5 @@ public class EnchantPlugin extends JavaPlugin {
      * Register each of your custom enchantments with this method
      * This needs to be overridden
      */
-    public void registerEnchantments(){}
+    public void registerEnchantments() {}
 }

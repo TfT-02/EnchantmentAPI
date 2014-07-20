@@ -24,10 +24,9 @@ package com.rit.sucy.config;
 import com.rit.sucy.service.ConfigNode;
 
 /**
-* Configuration options of the root config.yml file.
-*/
-public enum RootNode implements ConfigNode
-{
+ * Configuration options of the root config.yml file.
+ */
+public enum RootNode implements ConfigNode {
     ITEM_LORE
             ("Generate Unique Name", VarType.BOOLEAN, true),
     MAX_ENCHANTS
@@ -63,9 +62,7 @@ public enum RootNode implements ConfigNode
     CUSTOM_BASE
             (getVisibleSettingsNode() + getCustomNode() + "Base", VarType.BOOLEAN, true),
     CUSTOM_INTERVAL
-            (getVisibleSettingsNode() + getCustomNode() + "Interval", VarType.BOOLEAN, true),
-
-    ;
+            (getVisibleSettingsNode() + getCustomNode() + "Interval", VarType.BOOLEAN, true),;
 
     /**
      * Path.
@@ -91,15 +88,13 @@ public enum RootNode implements ConfigNode
      * @param type - Variable type.
      * @param def  - Default value.
      */
-    private RootNode(String path, VarType type, Object def)
-    {
+    private RootNode(String path, VarType type, Object def) {
         this.path = path;
         this.type = type;
         this.defaultValue = def;
     }
 
-    private RootNode(String path, VarType type, SubType subType, Object def)
-    {
+    private RootNode(String path, VarType type, SubType subType, Object def) {
         this.path = path;
         this.type = type;
         this.defaultValue = def;
@@ -107,20 +102,17 @@ public enum RootNode implements ConfigNode
     }
 
     @Override
-    public String getPath()
-    {
+    public String getPath() {
         return RootConfig.baseNode + getNode() + path;
     }
 
     @Override
-    public VarType getVarType()
-    {
+    public VarType getVarType() {
         return type;
     }
 
     @Override
-    public Object getDefaultValue()
-    {
+    public Object getDefaultValue() {
         return defaultValue;
     }
 

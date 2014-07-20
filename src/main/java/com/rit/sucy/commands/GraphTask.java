@@ -1,10 +1,8 @@
 package com.rit.sucy.commands;
 
-import com.rit.sucy.CustomEnchantment;
-import com.rit.sucy.EnchantmentAPI;
-import com.rit.sucy.config.RootConfig;
-import com.rit.sucy.config.RootNode;
-import com.rit.sucy.enchanting.EEnchantTable;
+import java.text.DecimalFormat;
+import java.util.Hashtable;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,9 +10,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.text.DecimalFormat;
-import java.util.Hashtable;
-import java.util.Map;
+import com.rit.sucy.CustomEnchantment;
+import com.rit.sucy.EnchantmentAPI;
+import com.rit.sucy.config.RootConfig;
+import com.rit.sucy.config.RootNode;
+import com.rit.sucy.enchanting.EEnchantTable;
 
 /**
  * Displays a graph for the probabilities of an enchantment on a weapon
@@ -48,8 +48,9 @@ public class GraphTask extends BukkitRunnable {
     public void run() {
 
         Hashtable<String, int[]> points = new Hashtable<String, int[]>();
-        for (int i = 1; i <= 30; i++)
+        for (int i = 1; i <= 30; i++) {
             points.put(enchant.name() + i, new int[enchant.getMaxLevel()]);
+        }
         // Run 3,000,000 samples over 30 levels
         for (int j = 1; j <= 30; j++) {
 
@@ -70,11 +71,14 @@ public class GraphTask extends BukkitRunnable {
         int max = 0;
         for (int j = 1; j <= 30; j++) {
             int[] data = points.get(enchant.name() + j);
-            if (data == null) continue;
+            if (data == null) {
+                continue;
+            }
 
             for (int k = 0; k < enchant.getMaxLevel(); k++) {
-                if (data[k] > max)
+                if (data[k] > max) {
                     max = data[k];
+                }
             }
         }
         max = (max + 999) / 1000;
@@ -89,7 +93,9 @@ public class GraphTask extends BukkitRunnable {
                     + format.format(i * max / 10.0) + "-"
                     + format.format((i + 1) * max / 10.0)
                     + "%" + lc + "_";
-            while (line.length() < 16) line += "_";
+            while (line.length() < 16) {
+                line += "_";
+            }
             line += ChatColor.GRAY + "|";
 
             // Print out the points
@@ -100,7 +106,7 @@ public class GraphTask extends BukkitRunnable {
                 String piece = lc + "_";
                 for (int k = 0; k < enchant.getMaxLevel(); k++) {
                     if (data[k] > i * max * 100 && data[k] <= (i + 1) * max * 100) {
-                        piece = ChatColor.getByChar((char)(49 + k % 6)) + "X";
+                        piece = ChatColor.getByChar((char) (49 + k % 6)) + "X";
                     }
                 }
                 line += piece;

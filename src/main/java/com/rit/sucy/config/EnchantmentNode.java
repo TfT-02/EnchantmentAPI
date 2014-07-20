@@ -1,55 +1,53 @@
 package com.rit.sucy.config;
 
+import java.util.Collections;
+
 import com.rit.sucy.CustomEnchantment;
 import com.rit.sucy.service.ConfigNode;
-
-import java.util.Collections;
 
 /**
  * @author Diemex
  */
-public enum EnchantmentNode implements ConfigNode
-{
+public enum EnchantmentNode implements ConfigNode {
     /**
      * Whether this enchantment is enabled and can be used
      */
-    ENABLED ("Enabled", VarType.BOOLEAN, true),
+    ENABLED("Enabled", VarType.BOOLEAN, true),
 
     /**
      * Whether or not the enchantment can be obtained in the table
      */
-    TABLE ("Table", VarType.BOOLEAN, true),
+    TABLE("Table", VarType.BOOLEAN, true),
 
     /**
      * Weight determines the commonness of the enchantment, higher weight = more common
      */
-    WEIGHT ("Weight", VarType.INTEGER, 5),
+    WEIGHT("Weight", VarType.INTEGER, 5),
 
     /**
      * Determines what enchantments conflict with others
      */
-    GROUP ("Group", VarType.STRING, CustomEnchantment.DEFAULT_GROUP),
+    GROUP("Group", VarType.STRING, CustomEnchantment.DEFAULT_GROUP),
 
     /**
      * The maximum level of the enchantment
      */
-    MAX ("Max Level", VarType.INTEGER, 1),
+    MAX("Max Level", VarType.INTEGER, 1),
 
     /**
      * The base value for calculating enchantment levels
      */
-    BASE ("Base", VarType.DOUBLE, 1),
+    BASE("Base", VarType.DOUBLE, 1),
 
     /**
      * The interval for calculating enchantment level
      */
-    INTERVAL ("Interval", VarType.DOUBLE, 10),
+    INTERVAL("Interval", VarType.DOUBLE, 10),
 
     /**
      * The items on which this enchantment can be obtained through the enchanting table
      */
-    ITEMS ("Items", VarType.LIST, Collections.emptyList()),
-    ;
+    ITEMS("Items", VarType.LIST, Collections.emptyList()),;
 
     /**
      * Path.
@@ -75,15 +73,13 @@ public enum EnchantmentNode implements ConfigNode
      * @param type - Variable type.
      * @param def  - Default value.
      */
-    private EnchantmentNode(String path, VarType type, Object def)
-    {
+    private EnchantmentNode(String path, VarType type, Object def) {
         this.path = path;
         this.type = type;
         this.defaultValue = def;
     }
 
-    private EnchantmentNode(String path, VarType type, SubType subType, Object def)
-    {
+    private EnchantmentNode(String path, VarType type, SubType subType, Object def) {
         this.path = path;
         this.type = type;
         this.defaultValue = def;
@@ -96,26 +92,22 @@ public enum EnchantmentNode implements ConfigNode
      * @return
      */
     @Override
-    public String getPath()
-    {
+    public String getPath() {
         return "." + path;
     }
 
     @Override
-    public VarType getVarType()
-    {
+    public VarType getVarType() {
         return type;
     }
 
     @Override
-    public Object getDefaultValue()
-    {
+    public Object getDefaultValue() {
         return defaultValue;
     }
 
     @Override
-    public SubType getSubType()
-    {
+    public SubType getSubType() {
         return subType;
     }
 }

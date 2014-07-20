@@ -1,9 +1,10 @@
 package com.rit.sucy.enchanting;
 
-import com.rit.sucy.CustomEnchantment;
+import java.util.Map;
+
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Map;
+import com.rit.sucy.CustomEnchantment;
 
 public class EnchantResult {
 
@@ -31,8 +32,9 @@ public class EnchantResult {
     }
 
     public void setLevel(int value) {
-        if (level == -1)
+        if (level == -1) {
             level = value;
+        }
     }
 
     public void setItem(ItemStack item) {
@@ -40,8 +42,9 @@ public class EnchantResult {
     }
 
     public void setFirstEnchant(CustomEnchantment enchant) {
-        if (firstEnchant == null)
+        if (firstEnchant == null) {
             firstEnchant = enchant;
+        }
     }
 
     public void setAddedEnchants(Map<CustomEnchantment, Integer> enchants) {

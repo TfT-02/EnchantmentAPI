@@ -1,13 +1,19 @@
 package com.rit.sucy.enchanting;
 
-import com.rit.sucy.CustomEnchantment;
-import com.rit.sucy.EnchantmentAPI;
-import com.rit.sucy.service.MaterialClass;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import com.rit.sucy.CustomEnchantment;
+import com.rit.sucy.EnchantmentAPI;
+import com.rit.sucy.service.MaterialClass;
 
 /**
  * Handles selecting enchantments when enchanting items
@@ -26,7 +32,8 @@ public class EEnchantTable {
      * @param item         item being enchanted
      * @param enchantLevel level of the enchantment
      * @param maxEnchants  maximum enchantments allowed
-     * @return             enchantment results
+     *
+     * @return enchantment results
      */
     public static EnchantResult enchant(Player enchanter, ItemStack item, int enchantLevel, int maxEnchants) {
         return enchant(enchanter, item, enchantLevel, maxEnchants, true);
@@ -40,7 +47,8 @@ public class EEnchantTable {
      * @param enchantLevel level of the enchantment
      * @param maxEnchants  maximum enchantments allowed
      * @param apply        whether or not to apply the enchantments
-     * @return             enchantment results
+     *
+     * @return enchantment results
      */
     public static EnchantResult enchant(Player enchanter, ItemStack item, int enchantLevel, int maxEnchants, boolean apply) {
 
@@ -76,8 +84,12 @@ public class EEnchantTable {
                 enchant = weightedRandom(validEnchants, totalWeight);
                 level = enchant.getEnchantLevel(max);
                 if (level < 1) {
-                    if (result.getFirstEnchant() != null) break;
-                    else continue;
+                    if (result.getFirstEnchant() != null) {
+                        break;
+                    }
+                    else {
+                        continue;
+                    }
                 }
 
                 // Add the enchantment to the list
@@ -86,17 +98,23 @@ public class EEnchantTable {
                 validEnchants.remove(enchant);
                 result.setFirstEnchant(enchant);
                 break;
-            } while(tries++ < MAX_TRIES || result.getFirstEnchant() == null);
+            } while (tries++ < MAX_TRIES || result.getFirstEnchant() == null);
 
             // Reduce the chance of getting another one along with the power of the next one
-            if (Math.random() < (enchantLevel + 1) / 50.0) chooseEnchantment = true;
+            if (Math.random() < (enchantLevel + 1) / 50.0) {
+                chooseEnchantment = true;
+            }
             enchantLevel /= 2;
 
             // Books can only have two enchantments
-            if (item.getType() == Material.BOOK && chosenEnchantWithCost.size() == 2) chooseEnchantment = false;
+            if (item.getType() == Material.BOOK && chosenEnchantWithCost.size() == 2) {
+                chooseEnchantment = false;
+            }
 
             // Max allowed enchantments
-            if (chosenEnchantWithCost.size() == maxEnchants) chooseEnchantment = false;
+            if (chosenEnchantWithCost.size() == maxEnchants) {
+                chooseEnchantment = false;
+            }
 
             // Clear up enchants that no longer can be added
             if (chooseEnchantment) {
@@ -107,8 +125,9 @@ public class EEnchantTable {
                         validEnchants.remove(i--);
                     }
                 }
-                if (validEnchants.size() == 0)
+                if (validEnchants.size() == 0) {
                     chooseEnchantment = false;
+                }
             }
         }
 
@@ -131,8 +150,9 @@ public class EEnchantTable {
             }
         }
 
-        if (success)
+        if (success) {
             result.setItem(item);
+        }
         return result;
     }
 
@@ -141,29 +161,32 @@ public class EEnchantTable {
      *
      * @param expLevel       chosen exp level
      * @param enchantability the enchantibility of the item
-     * @return               modified exp level
+     *
+     * @return modified exp level
      */
     static int modifiedLevel(int expLevel, int enchantability) {
         expLevel = expLevel + random(enchantability / 4 * 2) + 1;
         double bonus = random(0.3) + 0.85;
-        return (int)(expLevel * bonus + 0.5);
+        return (int) (expLevel * bonus + 0.5);
     }
 
     /**
      * Chooses a random integer with triangular distribution
      *
      * @param max maximum value
-     * @return    random integer
+     *
+     * @return random integer
      */
     static int random(int max) {
-        return (int)(Math.random() * max / 2 + Math.random() * max / 2);
+        return (int) (Math.random() * max / 2 + Math.random() * max / 2);
     }
 
     /**
      * Chooses a random double with triangular distribution
      *
      * @param max maximum value
-     * @return    random double
+     *
+     * @return random double
      */
     static double random(double max) {
         return Math.random() * max / 2 + Math.random() * max / 2;
@@ -172,11 +195,11 @@ public class EEnchantTable {
     /**
      * Get an Enchantment considering the weight (probability) of each Enchantment
      *
-     * @param enchantments  possible valid enchantments
+     * @param enchantments possible valid enchantments
      *
-     * @return              One possible CustomEnchantment
+     * @return One possible CustomEnchantment
      */
-    static CustomEnchantment weightedRandom (Collection<CustomEnchantment> enchantments, int totalWeight){
+    static CustomEnchantment weightedRandom(Collection<CustomEnchantment> enchantments, int totalWeight) {
 
         //select a random value between 0 and our total
         int random = new Random().nextInt(totalWeight);
@@ -186,11 +209,12 @@ public class EEnchantTable {
 
         //loop through our weightings until we arrive at the correct one
         int current = 0;
-        while (iter.hasNext()){
+        while (iter.hasNext()) {
             enchantment = iter.next();
             current += enchantment.getWeight();
-            if (random < current)
+            if (random < current) {
                 return enchantment;
+            }
         }
 
         return enchantment; //or null
@@ -199,7 +223,7 @@ public class EEnchantTable {
     /**
      * Gets the total weight of all custom enchantments applicable to the item
      *
-     * @return      total custom enchantment weight
+     * @return total custom enchantment weight
      */
     static int weightOfAllEnchants(Collection<CustomEnchantment> validEnchants) {
         int count = 0;

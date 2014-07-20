@@ -1,5 +1,16 @@
 package com.rit.sucy.commands;
 
+import java.text.DecimalFormat;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import com.rit.sucy.CustomEnchantment;
 import com.rit.sucy.EnchantmentAPI;
 import com.rit.sucy.config.RootConfig;
@@ -7,14 +18,6 @@ import com.rit.sucy.config.RootNode;
 import com.rit.sucy.enchanting.EEnchantTable;
 import com.rit.sucy.enchanting.VanillaEnchantment;
 import com.rit.sucy.service.ENameParser;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import java.text.DecimalFormat;
-import java.util.*;
 
 /**
  * Handles calculating item enchantment probability statistics
@@ -55,7 +58,9 @@ public class StatTask extends BukkitRunnable {
             Map<CustomEnchantment, Integer> list = EEnchantTable.enchant(null, item, level, maxEnchants, false).getAddedEnchants();
             for (Map.Entry<CustomEnchantment, Integer> entry : list.entrySet()) {
                 String name = entry.getKey().name();
-                if (!data.containsKey(name)) data.put(name, new int[entry.getKey().getMaxLevel()]);
+                if (!data.containsKey(name)) {
+                    data.put(name, new int[entry.getKey().getMaxLevel()]);
+                }
                 int[] values = data.get(name);
                 values[entry.getValue() - 1]++;
             }
@@ -64,12 +69,15 @@ public class StatTask extends BukkitRunnable {
         // Display the results
         sender.sendMessage(ChatColor.GOLD + item.getType().name() + ChatColor.DARK_GREEN + " - Enchantment Stats (Lv " + level + ")");
         for (CustomEnchantment enchant : validEnchants) {
-            if (enchant.getMaxLevel() == 0) continue;
+            if (enchant.getMaxLevel() == 0) {
+                continue;
+            }
             String message = enchant.name() + " (";
 
             // Convert vanilla enchantments to proper names
-            if (enchant instanceof VanillaEnchantment)
+            if (enchant instanceof VanillaEnchantment) {
                 message = ENameParser.getVanillaName(((VanillaEnchantment) enchant).getVanillaEnchant()) + " (";
+            }
 
             // Retrieve stats if the enchantment occurred at all
             if (data.containsKey(enchant.name())) {

@@ -3,8 +3,7 @@ package com.rit.sucy.service;
 /**
  * All known permission nodes.
  */
-public enum PermissionNode
-{
+public enum PermissionNode {
     /**
      * Access to commands that modify enchantments
      */
@@ -28,11 +27,11 @@ public enum PermissionNode
     /**
      * Access to using all enchantments
      */
-    ENCHANT ("enchant"),
+    ENCHANT("enchant"),
     /**
      * Access to all vanilla enchantments
      */
-    ENCHANT_VANILLA ("enchant.vanilla");
+    ENCHANT_VANILLA("enchant.vanilla");
     /**
      * Prefix for all permission nodes.
      */
@@ -48,8 +47,7 @@ public enum PermissionNode
      *
      * @param subperm - specific permission path.
      */
-    private PermissionNode(String subperm)
-    {
+    private PermissionNode(String subperm) {
         this.node = PREFIX + subperm;
     }
 
@@ -58,8 +56,7 @@ public enum PermissionNode
      *
      * @return Permission node path.
      */
-    public String getNode()
-    {
+    public String getNode() {
         return node;
     }
 }

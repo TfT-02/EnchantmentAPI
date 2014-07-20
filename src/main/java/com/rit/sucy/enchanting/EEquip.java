@@ -1,13 +1,14 @@
 package com.rit.sucy.enchanting;
 
-import com.rit.sucy.EnchantmentAPI;
-import com.rit.sucy.service.ENameParser;
+import java.util.Hashtable;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Hashtable;
+import com.rit.sucy.EnchantmentAPI;
+import com.rit.sucy.service.ENameParser;
 
 /**
  * Handles keeping track of player equipment for Equip and Unequip enchantment effects
@@ -64,21 +65,25 @@ public class EEquip extends BukkitRunnable {
     public void run() {
         ItemStack[] equips = player.getEquipment().getArmorContents();
         ItemStack[] previous = equipment.get(player.getName());
-        try{
+        try {
             for (int i = 0; i < equips.length; i++) {
-                if (equips[i] == null && (previous != null && previous[i] != null))
+                if (equips[i] == null && (previous != null && previous[i] != null)) {
                     doUnequip(previous[i]);
-                else if (equips[i] != null && (previous == null || previous[i] == null))
+                }
+                else if (equips[i] != null && (previous == null || previous[i] == null)) {
                     doEquip(equips[i]);
+                }
                 else if (previous == null)
-                    /* do nothing */ ;
+                    /* do nothing */ {
+                    ;
+                }
                 else if (!equips[i].toString().equalsIgnoreCase(previous[i].toString())) {
                     doEquip(equips[i]);
                     doUnequip(previous[i]);
                 }
             }
         }
-        catch(Exception e) {
+        catch (Exception e) {
             // Weird error
         }
         equipment.put(player.getName(), equips);
@@ -91,13 +96,21 @@ public class EEquip extends BukkitRunnable {
      */
     private void doEquip(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
-        if (meta == null) return;
-        if (!meta.hasLore()) return;
+        if (meta == null) {
+            return;
+        }
+        if (!meta.hasLore()) {
+            return;
+        }
         for (String lore : meta.getLore()) {
             String name = ENameParser.parseName(lore);
             int level = ENameParser.parseLevel(lore);
-            if (name == null) continue;
-            if (level == 0) continue;
+            if (name == null) {
+                continue;
+            }
+            if (level == 0) {
+                continue;
+            }
             if (EnchantmentAPI.isRegistered(name)) {
                 EnchantmentAPI.getEnchantment(name).applyEquipEffect(player, level);
             }
@@ -111,13 +124,21 @@ public class EEquip extends BukkitRunnable {
      */
     private void doUnequip(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
-        if (meta == null) return;
-        if (!meta.hasLore()) return;
+        if (meta == null) {
+            return;
+        }
+        if (!meta.hasLore()) {
+            return;
+        }
         for (String lore : meta.getLore()) {
             String name = ENameParser.parseName(lore);
             int level = ENameParser.parseLevel(lore);
-            if (name == null) continue;
-            if (level == 0) continue;
+            if (name == null) {
+                continue;
+            }
+            if (level == 0) {
+                continue;
+            }
             if (EnchantmentAPI.isRegistered(name)) {
                 EnchantmentAPI.getEnchantment(name).applyUnequipEffect(player, level);
             }

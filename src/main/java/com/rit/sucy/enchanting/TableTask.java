@@ -1,8 +1,8 @@
 package com.rit.sucy.enchanting;
 
-import com.rit.sucy.EUpdateTask;
-import com.rit.sucy.EnchantmentAPI;
-import com.rit.sucy.config.LanguageNode;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,8 +13,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.rit.sucy.EUpdateTask;
+import com.rit.sucy.EnchantmentAPI;
+import com.rit.sucy.config.LanguageNode;
 
 public class TableTask extends BukkitRunnable {
 
@@ -89,7 +90,7 @@ public class TableTask extends BukkitRunnable {
             return;
         }
 
-        EnchantingInventory inv = (EnchantingInventory)view.getTopInventory();
+        EnchantingInventory inv = (EnchantingInventory) view.getTopInventory();
         if (placeholder != null) {
             if (inv.getItem() == null || !inv.getItem().hasItemMeta() || !inv.getItem().getItemMeta().hasDisplayName()
                     || !inv.getItem().getItemMeta().getDisplayName().equals(placeholder.getItemMeta().getDisplayName())) {
@@ -122,10 +123,12 @@ public class TableTask extends BukkitRunnable {
         }
         item.setAmount(1);
         List<String> lore = item.getItemMeta().getLore();
-        if (storedItem.hasItemMeta() && storedItem.getItemMeta().hasDisplayName())
+        if (storedItem.hasItemMeta() && storedItem.getItemMeta().hasDisplayName()) {
             lore.add(storedItem.getItemMeta().getDisplayName());
-        else
+        }
+        else {
             lore.add(ChatColor.GRAY + storedItem.getType().name().toLowerCase().replace("_", " "));
+        }
         ItemMeta meta = item.getItemMeta();
         meta.setLore(lore);
         item.setItemMeta(meta);
@@ -136,12 +139,19 @@ public class TableTask extends BukkitRunnable {
      * Checks if an item can be enchanted
      *
      * @param item item to check
-     * @return     true if can enchant, false otherwise
+     *
+     * @return true if can enchant, false otherwise
      */
     private boolean canEnchant(ItemStack item) {
-        if (EnchantmentAPI.getAllValidEnchants(item, player).size() == 0) return false;
-        else if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) return false;
-        else if (EnchantmentAPI.getEnchantments(item).size() > 0) return false;
+        if (EnchantmentAPI.getAllValidEnchants(item, player).size() == 0) {
+            return false;
+        }
+        else if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
+            return false;
+        }
+        else if (EnchantmentAPI.getEnchantments(item).size() > 0) {
+            return false;
+        }
         return true;
     }
 }

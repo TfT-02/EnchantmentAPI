@@ -1,14 +1,13 @@
 package com.rit.sucy.lore;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.List;
+
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class LoreConfig {
 
@@ -27,8 +26,9 @@ public class LoreConfig {
 
     public Hashtable<String, List<String>> getLists() {
         Hashtable<String, List<String>> table = new Hashtable<String, List<String>>();
-        for (String key : getConfig().getKeys(false))
+        for (String key : getConfig().getKeys(false)) {
             table.put(key, getConfig().getStringList(key));
+        }
         return table;
     }
 

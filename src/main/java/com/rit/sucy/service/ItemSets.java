@@ -4,7 +4,7 @@ import org.bukkit.Material;
 
 public enum ItemSets {
 
-    SWORDS (new Material[] {
+    SWORDS(new Material[]{
             Material.WOOD_SWORD,
             Material.STONE_SWORD,
             Material.IRON_SWORD,
@@ -12,7 +12,7 @@ public enum ItemSets {
             Material.DIAMOND_SWORD
     }),
 
-    TOOLS (new Material[] {
+    TOOLS(new Material[]{
             Material.WOOD_AXE,
             Material.STONE_AXE,
             Material.IRON_AXE,
@@ -30,7 +30,7 @@ public enum ItemSets {
             Material.DIAMOND_PICKAXE
     }),
 
-    ARMOR (new Material[] {
+    ARMOR(new Material[]{
             Material.LEATHER_CHESTPLATE,
             Material.CHAINMAIL_CHESTPLATE,
             Material.IRON_CHESTPLATE,
@@ -53,7 +53,7 @@ public enum ItemSets {
             Material.DIAMOND_BOOTS
     }),
 
-    HELMETS (new Material[] {
+    HELMETS(new Material[]{
             Material.LEATHER_HELMET,
             Material.CHAINMAIL_HELMET,
             Material.IRON_HELMET,
@@ -61,7 +61,7 @@ public enum ItemSets {
             Material.DIAMOND_HELMET,
     }),
 
-    CHESTPLATES (new Material[] {
+    CHESTPLATES(new Material[]{
             Material.LEATHER_CHESTPLATE,
             Material.CHAINMAIL_CHESTPLATE,
             Material.IRON_CHESTPLATE,
@@ -69,7 +69,7 @@ public enum ItemSets {
             Material.DIAMOND_CHESTPLATE,
     }),
 
-    BOOTS (new Material[] {
+    BOOTS(new Material[]{
             Material.LEATHER_BOOTS,
             Material.CHAINMAIL_BOOTS,
             Material.IRON_BOOTS,
@@ -77,11 +77,9 @@ public enum ItemSets {
             Material.DIAMOND_BOOTS
     }),
 
-    BOW (new Material[] {
+    BOW(new Material[]{
             Material.BOW
-    }),
-
-    ;
+    }),;
 
     private final Material[] items;
 

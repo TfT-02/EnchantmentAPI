@@ -1,12 +1,11 @@
 package com.rit.sucy.enchanting;
 
-import com.rit.sucy.CustomEnchantment;
-import com.rit.sucy.EnchantmentAPI;
-import com.rit.sucy.config.LanguageNode;
-import com.rit.sucy.config.RootConfig;
-import com.rit.sucy.config.RootNode;
-import com.rit.sucy.service.ENameParser;
-import com.rit.sucy.service.PermissionNode;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -27,13 +26,23 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemBreakEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EnchantingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import com.rit.sucy.CustomEnchantment;
+import com.rit.sucy.EnchantmentAPI;
+import com.rit.sucy.config.LanguageNode;
+import com.rit.sucy.config.RootConfig;
+import com.rit.sucy.config.RootNode;
+import com.rit.sucy.service.ENameParser;
+import com.rit.sucy.service.PermissionNode;
 
 /**
  * Listens for events and passes them onto enchantments
@@ -70,7 +79,7 @@ public class EListener implements Listener {
      *
      * @param event the event details
      */
-    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onHit(EntityDamageByEntityEvent event) {
 
         if (excuse) {
@@ -79,14 +88,18 @@ public class EListener implements Listener {
         }
 
         // Rule out cases where enchantments don't apply
-        if (!(event.getEntity() instanceof LivingEntity)) return;
+        if (!(event.getEntity() instanceof LivingEntity)) {
+            return;
+        }
 
-        LivingEntity damaged = (LivingEntity)event.getEntity();
+        LivingEntity damaged = (LivingEntity) event.getEntity();
         LivingEntity damager = event.getDamager() instanceof LivingEntity ? (LivingEntity) event.getDamager()
-                : event.getDamager() instanceof Projectile ? ((Projectile)event.getDamager()).getShooter()
+                : event.getDamager() instanceof Projectile ? ((Projectile) event.getDamager()).getShooter()
                 : null;
         if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK
-                && event.getCause() != EntityDamageEvent.DamageCause.PROJECTILE) return;
+                && event.getCause() != EntityDamageEvent.DamageCause.PROJECTILE) {
+            return;
+        }
         if (damager != null) {
 
             // Apply offensive enchantments
@@ -106,14 +119,16 @@ public class EListener implements Listener {
      *
      * @param event the event details
      */
-    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamaged(EntityDamageEvent event) {
 
         // Rule out cases where enchantments don't apply
-        if (!(event.getEntity() instanceof LivingEntity)) return;
+        if (!(event.getEntity() instanceof LivingEntity)) {
+            return;
+        }
 
         // Apply enchantments
-        LivingEntity damaged = (LivingEntity)event.getEntity();
+        LivingEntity damaged = (LivingEntity) event.getEntity();
         for (Map.Entry<CustomEnchantment, Integer> entry : getValidEnchantments(getItems(damaged)).entrySet()) {
             entry.getKey().applyDefenseEffect(damaged, null, entry.getValue(), event);
         }
@@ -124,14 +139,16 @@ public class EListener implements Listener {
      *
      * @param event the event details
      */
-    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamaged(EntityDamageByBlockEvent event) {
 
         // Rule out cases where enchantments don't apply
-        if (!(event.getEntity() instanceof LivingEntity)) return;
+        if (!(event.getEntity() instanceof LivingEntity)) {
+            return;
+        }
 
         // Apply enchantments
-        LivingEntity damaged = (LivingEntity)event.getEntity();
+        LivingEntity damaged = (LivingEntity) event.getEntity();
         for (Map.Entry<CustomEnchantment, Integer> entry : getValidEnchantments(getItems(damaged)).entrySet()) {
             entry.getKey().applyDefenseEffect(damaged, null, entry.getValue(), event);
         }
@@ -143,7 +160,7 @@ public class EListener implements Listener {
      *
      * @param event the event details
      */
-    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamageBlock(BlockDamageEvent event) {
 
         // Apply enchantments
@@ -157,7 +174,7 @@ public class EListener implements Listener {
      *
      * @param event the event details
      */
-    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBreakBlock(BlockBreakEvent event) {
 
         // Apply enchantments
@@ -177,7 +194,7 @@ public class EListener implements Listener {
      *
      * @param event the event details
      */
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onInteract(PlayerInteractEvent event) {
 
         // Apply enchantments
@@ -193,7 +210,7 @@ public class EListener implements Listener {
      *
      * @param event the event details
      */
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onInteract(PlayerInteractEntityEvent event) {
         for (Map.Entry<CustomEnchantment, Integer> entry : getValidEnchantments(getItems(event.getPlayer())).entrySet()) {
             entry.getKey().applyEntityEffect(event.getPlayer(), entry.getValue(), event);
@@ -205,7 +222,7 @@ public class EListener implements Listener {
      *
      * @param event event details
      */
-    @EventHandler (priority =  EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEquip(InventoryClickEvent event) {
         new EEquip(plugin.getServer().getPlayer(event.getWhoClicked().getName())).runTaskLater(plugin, 1);
     }
@@ -225,7 +242,7 @@ public class EListener implements Listener {
      *
      * @param event event details
      */
-    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onConnect(PlayerJoinEvent event) {
         EEquip.loadPlayer(event.getPlayer());
     }
@@ -235,7 +252,7 @@ public class EListener implements Listener {
      *
      * @param event event details
      */
-    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDisconnect(PlayerQuitEvent event) {
         EEquip.clearPlayer(event.getPlayer());
         if (tasks.contains(event.getPlayer().getName())) {
@@ -248,10 +265,11 @@ public class EListener implements Listener {
      *
      * @param event event details
      */
-    @EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onProjectile(ProjectileLaunchEvent event) {
-        if (event.getEntity().getShooter() == null)
+        if (event.getEntity().getShooter() == null) {
             return;
+        }
         for (Map.Entry<CustomEnchantment, Integer> entry : getValidEnchantments(getItems(event.getEntity().getShooter())).entrySet()) {
             entry.getKey().applyProjectileEffect(event.getEntity().getShooter(), entry.getValue(), event);
         }
@@ -300,18 +318,23 @@ public class EListener implements Listener {
      *
      * @param event event details
      */
-    @EventHandler (ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true)
     public void onEnchant(EnchantItemEvent event) {
 
         // Make sure the player can enchant using custom mechanics
-        if (!event.getEnchanter().hasPermission(PermissionNode.TABLE.getNode()) || !tasks.containsKey(event.getEnchanter().getName()))
+        if (!event.getEnchanter().hasPermission(PermissionNode.TABLE.getNode()) || !tasks.containsKey(event.getEnchanter().getName())) {
             return;
+        }
         event.setCancelled(true);
 
         // Make sure the item can be enchanted
-        if (EnchantmentAPI.getEnchantments(event.getItem()).size() > 0) return;
+        if (EnchantmentAPI.getEnchantments(event.getItem()).size() > 0) {
+            return;
+        }
         if (event.getEnchanter().getLevel() < event.getExpLevelCost()
-                && event.getEnchanter().getGameMode() != GameMode.CREATIVE) return;
+                && event.getEnchanter().getGameMode() != GameMode.CREATIVE) {
+            return;
+        }
 
         // Make sure only one item is enchanted
         ItemStack storedItem = tasks.get(event.getEnchanter().getName()).stored;
@@ -327,8 +350,9 @@ public class EListener implements Listener {
         ItemStack item = result.getItem();
 
         // Make sure a result was created
-        if (item == null)
+        if (item == null) {
             return;
+        }
 
         // Clear the table
         event.getInventory().clear();
@@ -338,13 +362,15 @@ public class EListener implements Listener {
         boolean randomName = plugin.getModuleForClass(RootConfig.class).getBoolean(RootNode.ITEM_LORE);
         if (randomName && event.getEnchanter().hasPermission(PermissionNode.NAMES.getNode())) {
             String name = "" + ChatColor.COLOR_CHAR;
-            int random = (int)(Math.random() * 14) + 49;
-            if (random > 57) random += 39;
+            int random = (int) (Math.random() * 14) + 49;
+            if (random > 57) {
+                random += 39;
+            }
             String format = plugin.getConfig().getStringList(LanguageNode.NAME_FORMAT.getFullPath()).get(0);
             format = format.replace("{adjective}", plugin.getAdjective(result.getLevel() / 11 + 1 > 4 ? 4 : result.getLevel() / 11 + 1));
             format = format.replace("{weapon}", plugin.getWeapon(item.getType().name()));
             format = format.replace("{suffix}", plugin.getSuffix(result.getFirstEnchant()));
-            name += (char)random + format;
+            name += (char) random + format;
             ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : plugin.getServer().getItemFactory().getItemMeta(item.getType());
             meta.setDisplayName(name);
             item.setItemMeta(meta);
@@ -354,8 +380,9 @@ public class EListener implements Listener {
         event.getInventory().addItem(item);
 
         // Level cost
-        if (event.getEnchanter().getGameMode() != GameMode.CREATIVE)
+        if (event.getEnchanter().getGameMode() != GameMode.CREATIVE) {
             event.getEnchanter().setLevel(event.getEnchanter().getLevel() - event.getExpLevelCost());
+        }
     }
 
     /**
@@ -363,7 +390,7 @@ public class EListener implements Listener {
      *
      * @param event event details
      */
-    @EventHandler (priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPrepareEnchant(PrepareItemEnchantEvent event) {
         if (event.getItem().hasItemMeta() && event.getItem().getItemMeta().hasLore()
                 && event.getItem().getItemMeta().getLore().contains(tasks.get(event.getEnchanter().getName()).cantEnchant)) {
@@ -375,19 +402,28 @@ public class EListener implements Listener {
      * Gets a list of valid enchantments from a set of items
      *
      * @param items the list of items to check for valid enchantments
-     * @return      the valid enchantments and their corresponding enchantment levels
+     *
+     * @return the valid enchantments and their corresponding enchantment levels
      */
     private Map<CustomEnchantment, Integer> getValidEnchantments(ArrayList<ItemStack> items) {
         Map<CustomEnchantment, Integer> validEnchantments = new HashMap<CustomEnchantment, Integer>();
         for (ItemStack item : items) {
             ItemMeta meta = item.getItemMeta();
-            if (meta == null) continue;
-            if (!meta.hasLore()) continue;
+            if (meta == null) {
+                continue;
+            }
+            if (!meta.hasLore()) {
+                continue;
+            }
             for (String lore : meta.getLore()) {
                 String name = ENameParser.parseName(lore);
                 int level = ENameParser.parseLevel(lore);
-                if (name == null) continue;
-                if (level == 0) continue;
+                if (name == null) {
+                    continue;
+                }
+                if (level == 0) {
+                    continue;
+                }
                 if (EnchantmentAPI.isRegistered(name)) {
                     validEnchantments.put(EnchantmentAPI.getEnchantment(name), level);
                 }
@@ -400,7 +436,8 @@ public class EListener implements Listener {
      * Retrieves a list of equipment on the entity that have at least some lore
      *
      * @param entity the entity wearing the equipment
-     * @return       the list of all equipment with lore
+     *
+     * @return the list of all equipment with lore
      */
     private ArrayList<ItemStack> getItems(LivingEntity entity) {
         ItemStack[] armor = entity.getEquipment().getArmorContents();

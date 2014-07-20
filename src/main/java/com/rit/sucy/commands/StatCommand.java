@@ -1,12 +1,13 @@
 package com.rit.sucy.commands;
 
-import com.rit.sucy.EnchantmentAPI;
-import com.rit.sucy.service.ICommand;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
+
+import com.rit.sucy.EnchantmentAPI;
+import com.rit.sucy.service.ICommand;
 
 /**
  * Displays enchantment probability statistics for an item
@@ -21,7 +22,8 @@ public class StatCommand implements ICommand {
      * @param command - Command used.
      * @param label   - Label.
      * @param args    - Command arguments.
-     * @return        true if valid item and level, false otherwise
+     *
+     * @return true if valid item and level, false otherwise
      */
     @Override
     public boolean execute(EnchantmentAPI plugin, CommandSender sender, Command command, String label, String[] args) {
@@ -30,15 +32,17 @@ public class StatCommand implements ICommand {
 
                 // Parse the item
                 Material mat = Material.getMaterial(args[0].toUpperCase());
-                if (mat == null)
+                if (mat == null) {
                     mat = Material.getMaterial(Integer.parseInt(args[0]));
-                if (mat == null)
+                }
+                if (mat == null) {
                     return false;
+                }
 
 
                 // Make sure it has valid enchantments
                 ItemStack item = new ItemStack(mat);
-                if (EnchantmentAPI.getAllValidEnchants(item).size() == 0){
+                if (EnchantmentAPI.getAllValidEnchants(item).size() == 0) {
                     sender.sendMessage(ChatColor.DARK_RED + "That item has no natural enchantments");
                     return true;
                 }
@@ -55,6 +59,8 @@ public class StatCommand implements ICommand {
             }
             return false;
         }
-        else return false;
+        else {
+            return false;
+        }
     }
 }

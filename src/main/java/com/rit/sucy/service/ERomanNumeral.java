@@ -7,10 +7,9 @@ import org.apache.commons.lang.Validate;
  */
 public class ERomanNumeral {
 
-    private enum RomanNumber
-    {
+    private enum RomanNumber {
         //It is important that the order is in reverse
-        M (1000), D (500), C (100), L (50), X (10), V (5), I (1);
+        M(1000), D(500), C(100), L(50), X(10), V(5), I(1);
 
         private final int valueInDec;
 
@@ -19,8 +18,7 @@ public class ERomanNumeral {
          *
          * @param decimal value which represents the roman number
          */
-        private RomanNumber(int decimal)
-        {
+        private RomanNumber(int decimal) {
             this.valueInDec = decimal;
         }
 
@@ -29,8 +27,7 @@ public class ERomanNumeral {
          *
          * @return decimal of the roman number
          */
-        public int getInDecimal ()
-        {
+        public int getInDecimal() {
             return valueInDec;
         }
     }
@@ -39,7 +36,8 @@ public class ERomanNumeral {
      * Gets the Roman Numeral string representing the given value
      *
      * @param value value to be converted
-     * @return      Roman Numeral String
+     *
+     * @return Roman Numeral String
      */
     public static String numeralOf(int value) {
         Validate.isTrue(value > 0, "Roman numbers can't express zero or negative numbers!");
@@ -47,7 +45,7 @@ public class ERomanNumeral {
         StringBuilder builder = new StringBuilder();
         RomanNumber[] romanNumbers = RomanNumber.values();
 
-        for (int i = 0; i < romanNumbers.length; i++){
+        for (int i = 0; i < romanNumbers.length; i++) {
             RomanNumber romanNumber = romanNumbers[i];
 
             // Regular values
@@ -75,7 +73,8 @@ public class ERomanNumeral {
      * Parses a Roman Numeral string into an integer
      *
      * @param romanNumeral Roman Numeral string to parse
-     * @return             integer value (0 if invalid string)
+     *
+     * @return integer value (0 if invalid string)
      */
     public static int getValueOf(String romanNumeral) {
         char[] numerals = romanNumeral.toCharArray();
@@ -84,9 +83,13 @@ public class ERomanNumeral {
         for (int i = 0; i < numerals.length; i++) {
             int value = getNumeralValue(numerals[i]);
             if (i < numerals.length - 1) {
-                if (getNumeralValue(numerals[i + 1]) > value) value = -value;
+                if (getNumeralValue(numerals[i + 1]) > value) {
+                    value = -value;
+                }
             }
-            if (value == 0) return 0;
+            if (value == 0) {
+                return 0;
+            }
             total += value;
         }
         return total;
@@ -96,7 +99,8 @@ public class ERomanNumeral {
      * Gets the value of the given Roman Numeral character
      *
      * @param numeral Roman Numeral character
-     * @return        value of the character
+     *
+     * @return value of the character
      */
     public static int getNumeralValue(char numeral) {
         String romanNumeral = ("" + numeral).toUpperCase();

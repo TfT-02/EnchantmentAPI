@@ -1,27 +1,26 @@
 package com.rit.sucy.commands;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
 import com.rit.sucy.CustomEnchantment;
 import com.rit.sucy.EnchantmentAPI;
 import com.rit.sucy.enchanting.VanillaEnchantment;
 import com.rit.sucy.service.ICommand;
 import com.rit.sucy.service.PermissionNode;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 
 /**
  * List all custom Enchantments
  */
-public class EnchantListCommand implements ICommand
-{
+public class EnchantListCommand implements ICommand {
     @Override
     public boolean execute(EnchantmentAPI plugin, CommandSender sender, Command command, String label, String[] args) {
-        if (sender.hasPermission(PermissionNode.LIST.getNode()))
-        {
+        if (sender.hasPermission(PermissionNode.LIST.getNode())) {
             if (args.length > 0) {
                 try {
                     int page = Integer.parseInt(args[0]);
@@ -30,20 +29,26 @@ public class EnchantListCommand implements ICommand
                         Collections.sort(enchants);
                         Iterator iterator = enchants.iterator();
                         while (iterator.hasNext()) {
-                            CustomEnchantment next = (CustomEnchantment)iterator.next();
-                            if (next instanceof VanillaEnchantment)
+                            CustomEnchantment next = (CustomEnchantment) iterator.next();
+                            if (next instanceof VanillaEnchantment) {
                                 iterator.remove();
+                            }
                         }
-                        if (page * 9 > enchants.size() + 8)
+                        if (page * 9 > enchants.size() + 8) {
                             page = (enchants.size() + 8) / 9;
-                        else if (page < 1)
+                        }
+                        else if (page < 1) {
                             page = 1;
+                        }
                         sender.sendMessage(ChatColor.DARK_GREEN + "Enchantment Details - Page " + page + " / " + ((enchants.size() + 8) / 9));
-                        for (int i = (page - 1) * 9; i < page * 9 && i < enchants.size(); i++)
+                        for (int i = (page - 1) * 9; i < page * 9 && i < enchants.size(); i++) {
                             sender.sendMessage(ChatColor.GOLD + enchants.get(i).name() + ChatColor.GRAY + " - "
                                     + (enchants.get(i).getDescription() == null ? "No description" : enchants.get(i).getDescription()));
+                        }
                     }
-                    else sender.sendMessage(ChatColor.DARK_RED + "There are no registered enchantments to display");
+                    else {
+                        sender.sendMessage(ChatColor.DARK_RED + "There are no registered enchantments to display");
+                    }
 
                     return true;
                 }

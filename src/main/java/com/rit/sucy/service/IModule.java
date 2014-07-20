@@ -25,8 +25,7 @@ package com.rit.sucy.service;
 /**
  * Represents a module.
  */
-public interface IModule
-{
+public interface IModule {
     /**
      * Called when the module has been registered to the API.
      */

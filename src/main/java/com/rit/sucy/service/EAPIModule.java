@@ -5,8 +5,7 @@ import com.rit.sucy.EnchantmentAPI;
 /**
  * ExtraHardMode module.
  */
-public abstract class EAPIModule implements IModule
-{
+public abstract class EAPIModule implements IModule {
     /**
      * Plugin reference.
      */
@@ -17,8 +16,7 @@ public abstract class EAPIModule implements IModule
      *
      * @param plugin - Plugin instance.
      */
-    protected EAPIModule(EnchantmentAPI plugin)
-    {
+    protected EAPIModule(EnchantmentAPI plugin) {
         this.plugin = plugin;
     }
 }

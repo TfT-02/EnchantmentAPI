@@ -1,12 +1,13 @@
 package com.rit.sucy.service;
 
-import com.rit.sucy.EnchantmentAPI;
-import org.bukkit.configuration.ConfigurationSection;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.bukkit.configuration.ConfigurationSection;
+
+import com.rit.sucy.EnchantmentAPI;
 
 /**
  * Modular configuration class that utilizes a ConfigNode enumeration as easy
@@ -16,8 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Diemex
  */
 @SuppressWarnings("SameParameterValue")
-public abstract class ModularConfig extends EAPIModule
-{
+public abstract class ModularConfig extends EAPIModule {
     /**
      * Cache of options for the config.
      */
@@ -28,8 +28,7 @@ public abstract class ModularConfig extends EAPIModule
      *
      * @param plugin - plugin instance.
      */
-    protected ModularConfig(EnchantmentAPI plugin)
-    {
+    protected ModularConfig(EnchantmentAPI plugin) {
         super(plugin);
     }
 
@@ -39,42 +38,33 @@ public abstract class ModularConfig extends EAPIModule
      * @param node - ConfigNode to update.
      */
     @SuppressWarnings("unchecked")
-    protected void updateOption(final ConfigNode node, final ConfigurationSection config)
-    {
-        switch (node.getVarType())
-        {
-            case LIST:
-            {
+    protected void updateOption(final ConfigNode node, final ConfigurationSection config) {
+        switch (node.getVarType()) {
+            case LIST: {
                 List<String> list = config.getStringList(node.getPath());
-                if (list == null)
-                {
+                if (list == null) {
                     list = (List<String>) node.getDefaultValue();
                 }
                 OPTIONS.put(node, list);
                 break;
             }
-            case DOUBLE:
-            {
+            case DOUBLE: {
                 OPTIONS.put(node, config.getDouble(node.getPath(), (Double) node.getDefaultValue()));
                 break;
             }
-            case STRING:
-            {
+            case STRING: {
                 OPTIONS.put(node, config.getString(node.getPath(), (String) node.getDefaultValue()));
                 break;
             }
-            case INTEGER:
-            {
+            case INTEGER: {
                 OPTIONS.put(node, config.getInt(node.getPath(), (Integer) node.getDefaultValue()));
                 break;
             }
-            case BOOLEAN:
-            {
+            case BOOLEAN: {
                 OPTIONS.put(node, config.getBoolean(node.getPath(), (Boolean) node.getDefaultValue()));
                 break;
             }
-            default:
-            {
+            default: {
                 OPTIONS.put(node, config.get(node.getPath(), node.getDefaultValue()));
             }
         }
@@ -87,21 +77,20 @@ public abstract class ModularConfig extends EAPIModule
 
     /**
      * Force set the value for the given configuration node.
-     * <p>
+     * <p/>
      * Note, there is no type checking with this method.
      *
-     * @param node - ConfigNode path to use.
+     * @param node  - ConfigNode path to use.
      * @param value - Value to use.
      */
-    public void set(final ConfigNode node, final Object value)
-    {
+    public void set(final ConfigNode node, final Object value) {
         set(node.getPath(), value);
     }
 
     /**
      * Set the given path for the given value.
      *
-     * @param path - Path to use.
+     * @param path  - Path to use.
      * @param value - Value to use.
      */
     protected abstract void set(final String path, final Object value);
@@ -110,26 +99,22 @@ public abstract class ModularConfig extends EAPIModule
      * Get the integer value of the node.
      *
      * @param node - Node to use.
+     *
      * @return Value of the node. Returns -1 if unknown.
      */
-    public int getInt(final ConfigNode node)
-    {
+    public int getInt(final ConfigNode node) {
         int i = -1;
-        switch (node.getVarType())
-        {
-            case INTEGER:
-            {
-                try
-                {
+        switch (node.getVarType()) {
+            case INTEGER: {
+                try {
                     i = (Integer) OPTIONS.get(node);
-                } catch (NullPointerException npe)
-                {
+                }
+                catch (NullPointerException npe) {
                     i = (Integer) node.getDefaultValue();
                 }
                 break;
             }
-            default:
-            {
+            default: {
                 throw new IllegalArgumentException("Attempted to get " + node.toString() + " of type " + node.getVarType() + " as an integer.");
             }
         }
@@ -140,24 +125,20 @@ public abstract class ModularConfig extends EAPIModule
      * Get the string value of the node.
      *
      * @param node - Node to use.
+     *
      * @return Value of the node. Returns and empty string if unknown.
      */
-    protected String getString(final ConfigNode node)
-    {
+    protected String getString(final ConfigNode node) {
         String out = "";
-        switch (node.getVarType())
-        {
-            case STRING:
-            {
+        switch (node.getVarType()) {
+            case STRING: {
                 out = (String) OPTIONS.get(node);
-                if (out == null)
-                {
+                if (out == null) {
                     out = (String) node.getDefaultValue();
                 }
                 break;
             }
-            default:
-            {
+            default: {
                 throw new IllegalArgumentException("Attempted to get " + node.toString() + " of type " + node.getVarType() + " as a string.");
             }
         }
@@ -168,26 +149,22 @@ public abstract class ModularConfig extends EAPIModule
      * Get the list value of the node.
      *
      * @param node - Node to use.
+     *
      * @return Value of the node. Returns an empty list if unknown.
      */
     @SuppressWarnings("unchecked")
-    public List<String> getStringList(final ConfigNode node)
-    {
+    public List<String> getStringList(final ConfigNode node) {
         List<String> list = new ArrayList<String>();
-        switch (node.getVarType())
-        {
-            case LIST:
-            {
+        switch (node.getVarType()) {
+            case LIST: {
                 final ConfigurationSection config = plugin.getConfig();
                 list = config.getStringList(node.getPath());
-                if (list == null)
-                {
+                if (list == null) {
                     list = (List<String>) node.getDefaultValue();
                 }
                 break;
             }
-            default:
-            {
+            default: {
                 throw new IllegalArgumentException("Attempted to get " + node.toString() + " of type " + node.getVarType() + " as a List<String>.");
             }
         }
@@ -198,26 +175,22 @@ public abstract class ModularConfig extends EAPIModule
      * Get the double value of the node.
      *
      * @param node - Node to use.
+     *
      * @return Value of the node. Returns 0 if unknown.
      */
-    public double getDouble(final ConfigNode node)
-    {
+    public double getDouble(final ConfigNode node) {
         double d = 0.0;
-        switch (node.getVarType())
-        {
-            case DOUBLE:
-            {
-                try
-                {
+        switch (node.getVarType()) {
+            case DOUBLE: {
+                try {
                     d = (Double) OPTIONS.get(node);
-                } catch (NullPointerException npe)
-                {
+                }
+                catch (NullPointerException npe) {
                     d = (Double) node.getDefaultValue();
                 }
                 break;
             }
-            default:
-            {
+            default: {
                 throw new IllegalArgumentException("Attempted to get " + node.toString() + " of type " + node.getVarType() + " as a double.");
             }
         }
@@ -228,20 +201,17 @@ public abstract class ModularConfig extends EAPIModule
      * Get the boolean value of the node.
      *
      * @param node - Node to use.
+     *
      * @return Value of the node. Returns false if unknown.
      */
-    public boolean getBoolean(final ConfigNode node)
-    {
+    public boolean getBoolean(final ConfigNode node) {
         boolean bool = false;
-        switch (node.getVarType())
-        {
-            case BOOLEAN:
-            {
+        switch (node.getVarType()) {
+            case BOOLEAN: {
                 bool = (Boolean) OPTIONS.get(node);
                 break;
             }
-            default:
-            {
+            default: {
                 throw new IllegalArgumentException("Attempted to get " + node.toString() + " of type " + node.getVarType() + " as a boolean.");
             }
         }

@@ -1,43 +1,43 @@
 package com.rit.sucy.config;
 
-import com.rit.sucy.service.ConfigNode;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rit.sucy.service.ConfigNode;
+
 public enum LanguageNode implements ConfigNode {
 
-    ANVIL_COMPONENT ("Anvil Component", VarType.LIST, new ArrayList<String>(){{
+    ANVIL_COMPONENT("Anvil Component", VarType.LIST, new ArrayList<String>() {{
         add("&2Anvil Components");
         add("&dPlace components");
         add("&dover here!");
     }}),
 
-    ANVIL_SEPARATOR ("Anvil Separator", VarType.LIST, new ArrayList<String>(){{
+    ANVIL_SEPARATOR("Anvil Separator", VarType.LIST, new ArrayList<String>() {{
         add("&2Anvil Book");
         add("&d<- Components");
         add("&8------------");
         add("&dResults ->");
     }}),
 
-    ANVIL_RESULT ("Anvil Result", VarType.LIST, new ArrayList<String>(){{
+    ANVIL_RESULT("Anvil Result", VarType.LIST, new ArrayList<String>() {{
         add("&2Anvil Result");
         add("&dResults will");
         add("&dshow up over");
         add("&dhere!");
     }}),
 
-    TABLE_ENCHANTABLE ("Table Enchantable", VarType.LIST, new ArrayList<String>(){{
+    TABLE_ENCHANTABLE("Table Enchantable", VarType.LIST, new ArrayList<String>() {{
         add("&2Placeholder");
         add("&dEnchantable");
     }}),
 
-    TABLE_UNENCHANTABLE ("Table Unenchantable", VarType.LIST, new ArrayList<String>(){{
+    TABLE_UNENCHANTABLE("Table Unenchantable", VarType.LIST, new ArrayList<String>() {{
         add("&2Placeholder");
         add("&4Unenchantable");
     }}),
 
-    NAME_FORMAT ("Name Format", VarType.LIST, new ArrayList<String>(){{
+    NAME_FORMAT("Name Format", VarType.LIST, new ArrayList<String>() {{
         add("{adjective} {weapon} of {suffix}");
     }});
 

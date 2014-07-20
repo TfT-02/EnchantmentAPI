@@ -1,14 +1,15 @@
 package com.rit.sucy.commands;
 
-import com.rit.sucy.CustomEnchantment;
-import com.rit.sucy.EnchantmentAPI;
-import com.rit.sucy.service.ENameParser;
-import com.rit.sucy.service.ICommand;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
+
+import com.rit.sucy.CustomEnchantment;
+import com.rit.sucy.EnchantmentAPI;
+import com.rit.sucy.service.ENameParser;
+import com.rit.sucy.service.ICommand;
 
 /**
  * Displays a graph to the sender for the probability statistics for an item's enchantment
@@ -25,7 +26,8 @@ public class GraphCommand implements ICommand {
      * @param command - Command used.
      * @param label   - Label.
      * @param args    - Command arguments.
-     * @return        true if valid item and enchantment, false otherwise
+     *
+     * @return true if valid item and enchantment, false otherwise
      */
     @Override
     public boolean execute(EnchantmentAPI plugin, CommandSender sender, Command command, String label, String[] args) {
@@ -34,16 +36,20 @@ public class GraphCommand implements ICommand {
 
                 // Parse the item
                 Material mat = Material.getMaterial(args[0].toUpperCase());
-                if (mat == null)
+                if (mat == null) {
                     mat = Material.getMaterial(Integer.parseInt(args[0]));
-                if (mat == null)
+                }
+                if (mat == null) {
                     return false;
+                }
 
                 ItemStack item = new ItemStack(mat);
 
                 // Make sure the enchantment can work on the item
                 String name = args[1];
-                for (int i = 2; i < args.length; i++) name += " " + args[i];
+                for (int i = 2; i < args.length; i++) {
+                    name += " " + args[i];
+                }
                 CustomEnchantment enchant = EnchantmentAPI.getEnchantment(ENameParser.getBukkitName(name));
                 if (!enchant.canEnchantOnto(item)) {
                     sender.sendMessage(ChatColor.DARK_RED + "That enchantment doesn't work on that item");
@@ -68,6 +74,8 @@ public class GraphCommand implements ICommand {
             }
             return false;
         }
-        else return false;
+        else {
+            return false;
+        }
     }
 }
