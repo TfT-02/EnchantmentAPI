@@ -9,6 +9,7 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -35,6 +36,7 @@ import org.bukkit.inventory.EnchantingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.projectiles.ProjectileSource;
 
 import com.rit.sucy.CustomEnchantment;
 import com.rit.sucy.EnchantmentAPI;
@@ -87,30 +89,43 @@ public class EListener implements Listener {
             return;
         }
 
+        Entity damager = event.getDamager();
+        Entity damaged = event.getEntity();
+
         // Rule out cases where enchantments don't apply
-        if (!(event.getEntity() instanceof LivingEntity)) {
+        if (!(damaged instanceof LivingEntity)) {
             return;
         }
 
-        LivingEntity damaged = (LivingEntity) event.getEntity();
-        LivingEntity damager = event.getDamager() instanceof LivingEntity ? (LivingEntity) event.getDamager()
-                : event.getDamager() instanceof Projectile ? ((Projectile) event.getDamager()).getShooter()
-                : null;
+        LivingEntity attacker = null;
+        LivingEntity defender = (LivingEntity) damaged;
+
+        if (damager instanceof LivingEntity) {
+            attacker = (LivingEntity) damager;
+        }
+        else if (damager instanceof Projectile) {
+            ProjectileSource projectileSource = ((Projectile) damager).getShooter();
+
+            if (projectileSource instanceof LivingEntity) {
+                attacker = (LivingEntity) projectileSource;
+            }
+        }
+
         if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK
                 && event.getCause() != EntityDamageEvent.DamageCause.PROJECTILE) {
             return;
         }
-        if (damager != null) {
 
+        if (attacker != null) {
             // Apply offensive enchantments
-            for (Map.Entry<CustomEnchantment, Integer> entry : getValidEnchantments(getItems(damager)).entrySet()) {
-                entry.getKey().applyEffect(damager, damaged, entry.getValue(), event);
+            for (Map.Entry<CustomEnchantment, Integer> entry : getValidEnchantments(getItems(attacker)).entrySet()) {
+                entry.getKey().applyEffect(attacker, defender, entry.getValue(), event);
             }
         }
 
         // Apply defensive enchantments
-        for (Map.Entry<CustomEnchantment, Integer> entry : getValidEnchantments(getItems(damaged)).entrySet()) {
-            entry.getKey().applyDefenseEffect(damaged, damager, entry.getValue(), event);
+        for (Map.Entry<CustomEnchantment, Integer> entry : getValidEnchantments(getItems(defender)).entrySet()) {
+            entry.getKey().applyDefenseEffect(defender, attacker, entry.getValue(), event);
         }
     }
 
@@ -267,11 +282,20 @@ public class EListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onProjectile(ProjectileLaunchEvent event) {
-        if (event.getEntity().getShooter() == null) {
+        Projectile entity = event.getEntity();
+        ProjectileSource projectileSource = entity.getShooter();
+        LivingEntity attacker = null;
+
+        if (projectileSource instanceof LivingEntity) {
+            attacker = (LivingEntity) projectileSource;
+        }
+
+        if (attacker == null) {
             return;
         }
-        for (Map.Entry<CustomEnchantment, Integer> entry : getValidEnchantments(getItems(event.getEntity().getShooter())).entrySet()) {
-            entry.getKey().applyProjectileEffect(event.getEntity().getShooter(), entry.getValue(), event);
+
+        for (Map.Entry<CustomEnchantment, Integer> entry : getValidEnchantments(getItems(attacker)).entrySet()) {
+            entry.getKey().applyProjectileEffect(attacker, entry.getValue(), event);
         }
     }
 
