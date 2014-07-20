@@ -1,19 +1,19 @@
 package com.rit.sucy.Anvil;
 
-import net.minecraft.server.v1_7_R3.ContainerAnvil;
-import net.minecraft.server.v1_7_R3.ContainerAnvilInventory;
-import net.minecraft.server.v1_7_R3.IInventory;
+import java.lang.reflect.Field;
 
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftInventoryAnvil;
-import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftInventoryAnvil;
+import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.lang.reflect.Field;
+import net.minecraft.server.v1_7_R4.ContainerAnvil;
+import net.minecraft.server.v1_7_R4.ContainerAnvilInventory;
+import net.minecraft.server.v1_7_R4.IInventory;
 
 public class MainAnvil implements AnvilView {
 
@@ -47,7 +47,7 @@ public class MainAnvil implements AnvilView {
     public String getNameText() {
         try {
             // Make sure the item doesn't have a unique name
-            for (net.minecraft.server.v1_7_R3.ItemStack item : inv.getIngredientsInventory().getContents()) {
+            for (net.minecraft.server.v1_7_R4.ItemStack item : inv.getIngredientsInventory().getContents()) {
                 ItemStack i = CraftItemStack.asBukkitCopy(item);
                 if (i.hasItemMeta() && i.getItemMeta().hasDisplayName() && !i.getItemMeta().getDisplayName().equals(ChatColor.stripColor(i.getItemMeta().getDisplayName()))) {
                     return null;
@@ -65,7 +65,7 @@ public class MainAnvil implements AnvilView {
             // More gross (Reflection to obtain the first item)
             Field g = ContainerAnvil.class.getDeclaredField("h");
             g.setAccessible(true);
-            net.minecraft.server.v1_7_R3.ItemStack item = ((IInventory) g.get(anvil)).getItem(0);
+            net.minecraft.server.v1_7_R4.ItemStack item = ((IInventory) g.get(anvil)).getItem(0);
             if (item == null) {
                 return null;
             }
